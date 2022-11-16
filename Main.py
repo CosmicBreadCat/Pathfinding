@@ -25,10 +25,30 @@ def getNextNeighbours(cell, existing):
     return neighbours
 
 
-def genPathing(start):
-    pathing = {}
+def genPathingWeb(start):
+    pathingWeb = {}
     existingNeighbours = []
+    queue = []
+    visited = 0
 
+    while visited < n*n:
+        if len(queue) == 0:
+            neighbours = getNextNeighbours(start, existingNeighbours)
+            pathingWeb[start] = neighbours
+            visited += 1
+            for neighbour in neighbours:
+                queue.append(neighbour)
+                existingNeighbours.append(neighbour)
+        else:
+            for i in queue:
+                neighbours = getNextNeighbours(i, existingNeighbours)
+                pathingWeb[i] = neighbours
+                visited += 1
+                for neighbour in neighbours:
+                    queue.append(neighbour)
+                    existingNeighbours.append(neighbour)
+                queue.remove(i)
+    return pathingWeb
 
 
 def BFS(pathing, startPoint):
@@ -45,4 +65,5 @@ def BFS(pathing, startPoint):
                 queue.append(neighbour)
 
 
-print(genPathing(cur_point))
+for k, v in zip(genPathingWeb(cur_point).keys(), genPathingWeb(cur_point).values()):
+    print(k, ":", v)
